@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Trưởng Bưu Cục
 // @namespace    local.800best.truongbuucuc
-// @version      1.9.0
-// @description  Bản chia sẻ cho Trưởng bưu cục: màn Thống kê tổng quan 1 bưu cục (thẻ chỉ số + bảng shipper, gồm Chỉ số giao hàng / Chỉ số lấy hàng / Chỉ số TikTok Shop). Tự dò bưu cục đang quản lý khi cài lần đầu. v1.1: bỏ GTC chuyến (2 dải) thay bằng "Cần đạt KPI POD2400" (KPI% tự cài ở Cài đặt), thêm thẻ Tỉ lệ hoàn (cuối dải Giao thường), đổi được màu nền (🎨). v1.2: bỏ áp quy tắc lọc "ship đi làm" của tool chính vào bảng này, phông chữ to hơn ~50%, bảng shipper giãn hết chiều cao còn trống (bớt cuộn). v1.3: sửa đúng nguyên nhân thiếu "Đơn mới" trong bảng — gộp thêm các tài khoản có quét đơn nhưng không khớp tên với danh sách "đi làm hôm nay" (trước đây bị loại âm thầm khỏi bảng), cỡ chữ giảm lại 20% so với v1.2. v1.4: thêm nút "📅 Ngày khác" xem lại 9 ngày gần nhất (lấy từ Kanban vì API hôm nay không tra được ngày cũ) — bảng ngày cũ rút gọn (không có Chưa quét giao/Đang giao/Tỉ lệ hoàn/Backlog do Kanban không trả đủ trường), vẫn có Lấy hàng. v1.4.1: sửa bảng ngày cũ bị thiếu đơn — gộp các đơn chưa gán tên shipper (ví dụ chưa có người lấy/phát) vào 1 dòng "(Chưa gán shipper)" thay vì bỏ qua hoàn toàn. v1.5: bảng "hôm nay" cũng thêm dòng "(Chưa quét giao)" cho đồng bộ với bảng ngày cũ — TỔNG của bảng giờ khớp thẳng với thẻ "Tổng đơn" phía trên, không cần cộng thêm số ở thẻ "Chưa quét giao" nữa. v1.5.1: sửa TỔNG bảng bị CỘNG THỪA (913 > 895 thẻ) — danh sách "đi làm hôm nay" đôi khi liệt kê trùng 1 tài khoản nhiều dòng, khiến đơn của người đó bị tính 2 lần; giờ chỉ giữ 1 dòng cho mỗi người. v1.6: watermark đổi sang dạng huy hiệu (to hơn ~50%, nền trắng mờ + viền, màu theo theme đang chọn), thêm dòng email dưới tên. v1.6.1: sửa tiếp TỔNG bảng vẫn lệch thẻ (918 vs 895) — cột "Tổng đơn giao"/"Đã ký nhận" từng ưu tiên lấy số báo sẵn trong bảng nhân sự thay vì số tự đếm lại từ đơn hàng (2 nguồn không khớp nhau); giờ luôn dùng số tự đếm khi đã khớp được người, chỉ ước lượng tạm khi không khớp được ai. v1.7: rà soát lại toàn bộ công thức bằng toán (không chỉ vá theo báo lỗi) — bỏ hẳn số ước lượng từ bảng nhân sự (nguồn gây lệch), thêm dòng "(Không khớp người quét)" cho đơn đã quét nhưng đọc không ra tên. Từ bản này, TỔNG bảng = thẻ "Tổng đơn" là một đẳng thức LUÔN đúng theo cấu trúc code, không còn phụ thuộc dữ liệu thực tế của từng ngày. v1.8: tự kiểm tra bản mới trên GitHub (không cần vào Tampermonkey) — khi có bản mới sẽ hiện banner "🆕 Đã có bản mới…" ngay trong tool kèm nút "⬆ Cập nhật" (bấm 1 lần là Tampermonkey tự hiện hộp cài bản mới), cộng thêm chấm sáng trên nút mở tool để biết có bản mới cả khi chưa mở. v1.9: thêm điều khiển từ xa qua file config.json trên GitHub (sửa file đó là áp dụng ngay cho mọi người, không cần đẩy bản code mới) — "locked":true để tạm khoá cả tool kèm lý do hiển thị, và "notice"/"noticeId" để gửi 1 thông báo nổi bật (banner cam, có nút "Đã đọc") tới tất cả người đang dùng.
+// @version      1.10.0
+// @description  Bản chia sẻ cho Trưởng bưu cục: màn Thống kê tổng quan 1 bưu cục (thẻ chỉ số + bảng shipper, gồm Chỉ số giao hàng / Chỉ số lấy hàng / Chỉ số TikTok Shop). Tự dò bưu cục đang quản lý khi cài lần đầu. v1.1: bỏ GTC chuyến (2 dải) thay bằng "Cần đạt KPI POD2400" (KPI% tự cài ở Cài đặt), thêm thẻ Tỉ lệ hoàn (cuối dải Giao thường), đổi được màu nền (🎨). v1.2: bỏ áp quy tắc lọc "ship đi làm" của tool chính vào bảng này, phông chữ to hơn ~50%, bảng shipper giãn hết chiều cao còn trống (bớt cuộn). v1.3: sửa đúng nguyên nhân thiếu "Đơn mới" trong bảng — gộp thêm các tài khoản có quét đơn nhưng không khớp tên với danh sách "đi làm hôm nay" (trước đây bị loại âm thầm khỏi bảng), cỡ chữ giảm lại 20% so với v1.2. v1.4: thêm nút "📅 Ngày khác" xem lại 9 ngày gần nhất (lấy từ Kanban vì API hôm nay không tra được ngày cũ) — bảng ngày cũ rút gọn (không có Chưa quét giao/Đang giao/Tỉ lệ hoàn/Backlog do Kanban không trả đủ trường), vẫn có Lấy hàng. v1.4.1: sửa bảng ngày cũ bị thiếu đơn — gộp các đơn chưa gán tên shipper (ví dụ chưa có người lấy/phát) vào 1 dòng "(Chưa gán shipper)" thay vì bỏ qua hoàn toàn. v1.5: bảng "hôm nay" cũng thêm dòng "(Chưa quét giao)" cho đồng bộ với bảng ngày cũ — TỔNG của bảng giờ khớp thẳng với thẻ "Tổng đơn" phía trên, không cần cộng thêm số ở thẻ "Chưa quét giao" nữa. v1.5.1: sửa TỔNG bảng bị CỘNG THỪA (913 > 895 thẻ) — danh sách "đi làm hôm nay" đôi khi liệt kê trùng 1 tài khoản nhiều dòng, khiến đơn của người đó bị tính 2 lần; giờ chỉ giữ 1 dòng cho mỗi người. v1.6: watermark đổi sang dạng huy hiệu (to hơn ~50%, nền trắng mờ + viền, màu theo theme đang chọn), thêm dòng email dưới tên. v1.6.1: sửa tiếp TỔNG bảng vẫn lệch thẻ (918 vs 895) — cột "Tổng đơn giao"/"Đã ký nhận" từng ưu tiên lấy số báo sẵn trong bảng nhân sự thay vì số tự đếm lại từ đơn hàng (2 nguồn không khớp nhau); giờ luôn dùng số tự đếm khi đã khớp được người, chỉ ước lượng tạm khi không khớp được ai. v1.7: rà soát lại toàn bộ công thức bằng toán (không chỉ vá theo báo lỗi) — bỏ hẳn số ước lượng từ bảng nhân sự (nguồn gây lệch), thêm dòng "(Không khớp người quét)" cho đơn đã quét nhưng đọc không ra tên. Từ bản này, TỔNG bảng = thẻ "Tổng đơn" là một đẳng thức LUÔN đúng theo cấu trúc code, không còn phụ thuộc dữ liệu thực tế của từng ngày. v1.8: tự kiểm tra bản mới trên GitHub (không cần vào Tampermonkey) — khi có bản mới sẽ hiện banner "🆕 Đã có bản mới…" ngay trong tool kèm nút "⬆ Cập nhật" (bấm 1 lần là Tampermonkey tự hiện hộp cài bản mới), cộng thêm chấm sáng trên nút mở tool để biết có bản mới cả khi chưa mở. v1.9: thêm điều khiển từ xa qua file config.json trên GitHub (sửa file đó là áp dụng ngay cho mọi người, không cần đẩy bản code mới) — "locked":true để tạm khoá cả tool kèm lý do hiển thị, và "notice"/"noticeId" để gửi 1 thông báo nổi bật (banner cam, có nút "Đã đọc") tới tất cả người đang dùng. v1.10: thêm thống kê sử dụng theo bưu cục — mỗi lần tải dữ liệu hôm nay (mở tool/bấm Tải lại) tự báo về 1 Google Sheet, Sheet tự tính "Số lần sử dụng trong ngày" và "Số ngày sử dụng" cho từng bưu cục; mặc định tắt cho tới khi điền link Web App vào USAGE_PING_URL.
 // @match        https://v9.800best.com/sea-web/*
 // @run-at       document-start
 // @require      https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js
@@ -18,7 +18,7 @@
    * Kiểm tra phiên bản mới (từ GitHub) — nhớ bump SCRIPT_VERSION cùng lúc với
    * @version ở đầu file mỗi lần đổi code, nếu không banner cập nhật sẽ sai.
    * ------------------------------------------------------------------ */
-  const SCRIPT_VERSION = '1.9.0';
+  const SCRIPT_VERSION = '1.10.0';
   const RAW_URL = 'https://raw.githubusercontent.com/Erick1939/best-TBC/main/800best-truongbuucuc.user.js';
   const UPDATE_CHECK_MS = 6 * 60 * 60 * 1000; // 6 tiếng/lần, đỡ gọi GitHub liên tục
   // File cấu hình điều khiển từ xa: sửa trực tiếp trên GitHub (không cần đổi code/đẩy bản mới)
@@ -696,6 +696,7 @@
    * ------------------------------------------------------------------ */
   async function loadData() {
     if (state.busy || !state.office) return;
+    reportUsage(state.office);
     state.busy = true; state.err = ''; render();
     const now = new Date();
     try {
@@ -1139,6 +1140,24 @@
       state.noticeDismissed = !nid || nid === loadDismissedNotice();
       render(); updateLaunchBtn();
     } catch (e) { /* mạng lỗi hoặc chưa có config.json — bỏ qua, thử lại lần sau */ }
+  }
+  /* ------------------------------------------------------------------ *
+   * Thống kê sử dụng theo bưu cục — gửi 1 "ping" về Google Sheet (qua Apps
+   * Script Web App) MỖI LẦN tải dữ liệu "hôm nay" (loadData): mở tool lần
+   * đầu, bấm "Tải lại", hoặc chọn bưu cục. Phía Apps Script tự tính:
+   *   - Số lần sử dụng trong ngày: đếm số ping trong CÙNG 1 ngày, về 0 khi
+   *     sang ngày mới.
+   *   - Số ngày sử dụng: đếm tổng số ngày KHÁC NHAU đã từng ping.
+   * Không ping khi xem "ngày cũ" (chỉ tính hoạt động hôm nay).
+   * Để trống USAGE_PING_URL (mặc định) thì tính năng này tự tắt.
+   * ------------------------------------------------------------------ */
+  const USAGE_PING_URL = 'https://script.google.com/macros/s/AKfycbxyk7oVbv_VIPKHiL-zxkD3xX8vNRfgCS3iLWO_OsgLY4hssormk6Obrs8jYRpF3-Nc/exec';
+  function reportUsage(office) {
+    if (!USAGE_PING_URL || !office || !office.name) return;
+    try {
+      const url = USAGE_PING_URL + '?office=' + encodeURIComponent(office.name) + '&v=' + encodeURIComponent(SCRIPT_VERSION) + '&t=' + Date.now();
+      const img = new Image(); img.referrerPolicy = 'no-referrer'; img.src = url; // dùng <img> để tránh vướng CORS, không cần đọc phản hồi
+    } catch (e) { /* bỏ qua, không ảnh hưởng gì tới tool */ }
   }
   function updateLaunchBtn() {
     const btn = $('#tbc-launch'); if (!btn) return;
