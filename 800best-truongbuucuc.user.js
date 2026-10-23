@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Trưởng Bưu Cục
 // @namespace    local.800best.truongbuucuc
-// @version      1.8.0
-// @description  Bản chia sẻ cho Trưởng bưu cục: màn Thống kê tổng quan 1 bưu cục (thẻ chỉ số + bảng shipper, gồm Chỉ số giao hàng / Chỉ số lấy hàng / Chỉ số TikTok Shop). Tự dò bưu cục đang quản lý khi cài lần đầu. v1.1: bỏ GTC chuyến (2 dải) thay bằng "Cần đạt KPI POD2400" (KPI% tự cài ở Cài đặt), thêm thẻ Tỉ lệ hoàn (cuối dải Giao thường), đổi được màu nền (🎨). v1.2: bỏ áp quy tắc lọc "ship đi làm" của tool chính vào bảng này, phông chữ to hơn ~50%, bảng shipper giãn hết chiều cao còn trống (bớt cuộn). v1.3: sửa đúng nguyên nhân thiếu "Đơn mới" trong bảng — gộp thêm các tài khoản có quét đơn nhưng không khớp tên với danh sách "đi làm hôm nay" (trước đây bị loại âm thầm khỏi bảng), cỡ chữ giảm lại 20% so với v1.2. v1.4: thêm nút "📅 Ngày khác" xem lại 9 ngày gần nhất (lấy từ Kanban vì API hôm nay không tra được ngày cũ) — bảng ngày cũ rút gọn (không có Chưa quét giao/Đang giao/Tỉ lệ hoàn/Backlog do Kanban không trả đủ trường), vẫn có Lấy hàng. v1.4.1: sửa bảng ngày cũ bị thiếu đơn — gộp các đơn chưa gán tên shipper (ví dụ chưa có người lấy/phát) vào 1 dòng "(Chưa gán shipper)" thay vì bỏ qua hoàn toàn. v1.5: bảng "hôm nay" cũng thêm dòng "(Chưa quét giao)" cho đồng bộ với bảng ngày cũ — TỔNG của bảng giờ khớp thẳng với thẻ "Tổng đơn" phía trên, không cần cộng thêm số ở thẻ "Chưa quét giao" nữa. v1.5.1: sửa TỔNG bảng bị CỘNG THỪA (913 > 895 thẻ) — danh sách "đi làm hôm nay" đôi khi liệt kê trùng 1 tài khoản nhiều dòng, khiến đơn của người đó bị tính 2 lần; giờ chỉ giữ 1 dòng cho mỗi người. v1.6: watermark đổi sang dạng huy hiệu (to hơn ~50%, nền trắng mờ + viền, màu theo theme đang chọn), thêm dòng email dưới tên. v1.6.1: sửa tiếp TỔNG bảng vẫn lệch thẻ (918 vs 895) — cột "Tổng đơn giao"/"Đã ký nhận" từng ưu tiên lấy số báo sẵn trong bảng nhân sự thay vì số tự đếm lại từ đơn hàng (2 nguồn không khớp nhau); giờ luôn dùng số tự đếm khi đã khớp được người, chỉ ước lượng tạm khi không khớp được ai. v1.7: rà soát lại toàn bộ công thức bằng toán (không chỉ vá theo báo lỗi) — bỏ hẳn số ước lượng từ bảng nhân sự (nguồn gây lệch), thêm dòng "(Không khớp người quét)" cho đơn đã quét nhưng đọc không ra tên. Từ bản này, TỔNG bảng = thẻ "Tổng đơn" là một đẳng thức LUÔN đúng theo cấu trúc code, không còn phụ thuộc dữ liệu thực tế của từng ngày. v1.8: tự kiểm tra bản mới trên GitHub (không cần vào Tampermonkey) — khi có bản mới sẽ hiện banner "🆕 Đã có bản mới…" ngay trong tool kèm nút "⬆ Cập nhật" (bấm 1 lần là Tampermonkey tự hiện hộp cài bản mới), cộng thêm chấm sáng trên nút mở tool để biết có bản mới cả khi chưa mở.
+// @version      1.9.0
+// @description  Bản chia sẻ cho Trưởng bưu cục: màn Thống kê tổng quan 1 bưu cục (thẻ chỉ số + bảng shipper, gồm Chỉ số giao hàng / Chỉ số lấy hàng / Chỉ số TikTok Shop). Tự dò bưu cục đang quản lý khi cài lần đầu. v1.1: bỏ GTC chuyến (2 dải) thay bằng "Cần đạt KPI POD2400" (KPI% tự cài ở Cài đặt), thêm thẻ Tỉ lệ hoàn (cuối dải Giao thường), đổi được màu nền (🎨). v1.2: bỏ áp quy tắc lọc "ship đi làm" của tool chính vào bảng này, phông chữ to hơn ~50%, bảng shipper giãn hết chiều cao còn trống (bớt cuộn). v1.3: sửa đúng nguyên nhân thiếu "Đơn mới" trong bảng — gộp thêm các tài khoản có quét đơn nhưng không khớp tên với danh sách "đi làm hôm nay" (trước đây bị loại âm thầm khỏi bảng), cỡ chữ giảm lại 20% so với v1.2. v1.4: thêm nút "📅 Ngày khác" xem lại 9 ngày gần nhất (lấy từ Kanban vì API hôm nay không tra được ngày cũ) — bảng ngày cũ rút gọn (không có Chưa quét giao/Đang giao/Tỉ lệ hoàn/Backlog do Kanban không trả đủ trường), vẫn có Lấy hàng. v1.4.1: sửa bảng ngày cũ bị thiếu đơn — gộp các đơn chưa gán tên shipper (ví dụ chưa có người lấy/phát) vào 1 dòng "(Chưa gán shipper)" thay vì bỏ qua hoàn toàn. v1.5: bảng "hôm nay" cũng thêm dòng "(Chưa quét giao)" cho đồng bộ với bảng ngày cũ — TỔNG của bảng giờ khớp thẳng với thẻ "Tổng đơn" phía trên, không cần cộng thêm số ở thẻ "Chưa quét giao" nữa. v1.5.1: sửa TỔNG bảng bị CỘNG THỪA (913 > 895 thẻ) — danh sách "đi làm hôm nay" đôi khi liệt kê trùng 1 tài khoản nhiều dòng, khiến đơn của người đó bị tính 2 lần; giờ chỉ giữ 1 dòng cho mỗi người. v1.6: watermark đổi sang dạng huy hiệu (to hơn ~50%, nền trắng mờ + viền, màu theo theme đang chọn), thêm dòng email dưới tên. v1.6.1: sửa tiếp TỔNG bảng vẫn lệch thẻ (918 vs 895) — cột "Tổng đơn giao"/"Đã ký nhận" từng ưu tiên lấy số báo sẵn trong bảng nhân sự thay vì số tự đếm lại từ đơn hàng (2 nguồn không khớp nhau); giờ luôn dùng số tự đếm khi đã khớp được người, chỉ ước lượng tạm khi không khớp được ai. v1.7: rà soát lại toàn bộ công thức bằng toán (không chỉ vá theo báo lỗi) — bỏ hẳn số ước lượng từ bảng nhân sự (nguồn gây lệch), thêm dòng "(Không khớp người quét)" cho đơn đã quét nhưng đọc không ra tên. Từ bản này, TỔNG bảng = thẻ "Tổng đơn" là một đẳng thức LUÔN đúng theo cấu trúc code, không còn phụ thuộc dữ liệu thực tế của từng ngày. v1.8: tự kiểm tra bản mới trên GitHub (không cần vào Tampermonkey) — khi có bản mới sẽ hiện banner "🆕 Đã có bản mới…" ngay trong tool kèm nút "⬆ Cập nhật" (bấm 1 lần là Tampermonkey tự hiện hộp cài bản mới), cộng thêm chấm sáng trên nút mở tool để biết có bản mới cả khi chưa mở. v1.9: thêm điều khiển từ xa qua file config.json trên GitHub (sửa file đó là áp dụng ngay cho mọi người, không cần đẩy bản code mới) — "locked":true để tạm khoá cả tool kèm lý do hiển thị, và "notice"/"noticeId" để gửi 1 thông báo nổi bật (banner cam, có nút "Đã đọc") tới tất cả người đang dùng.
 // @match        https://v9.800best.com/sea-web/*
 // @run-at       document-start
 // @require      https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js
@@ -18,9 +18,13 @@
    * Kiểm tra phiên bản mới (từ GitHub) — nhớ bump SCRIPT_VERSION cùng lúc với
    * @version ở đầu file mỗi lần đổi code, nếu không banner cập nhật sẽ sai.
    * ------------------------------------------------------------------ */
-  const SCRIPT_VERSION = '1.8.0';
+  const SCRIPT_VERSION = '1.9.0';
   const RAW_URL = 'https://raw.githubusercontent.com/Erick1939/best-TBC/main/800best-truongbuucuc.user.js';
   const UPDATE_CHECK_MS = 6 * 60 * 60 * 1000; // 6 tiếng/lần, đỡ gọi GitHub liên tục
+  // File cấu hình điều khiển từ xa: sửa trực tiếp trên GitHub (không cần đổi code/đẩy bản mới)
+  // để khoá tạm tool (locked) hoặc gửi thông báo (notice) tới mọi người đang dùng.
+  const CONFIG_URL = 'https://raw.githubusercontent.com/Erick1939/best-TBC/main/config.json';
+  const CONFIG_CHECK_MS = 15 * 60 * 1000; // 15 phút/lần — khoá/thông báo cần có hiệu lực nhanh hơn bản update
   // So 2 chuỗi "x.y.z": trả về true nếu a mới hơn b
   function verNewer(a, b) {
     const pa = String(a ?? '').split('.').map(n => parseInt(n, 10) || 0);
@@ -63,6 +67,7 @@
     // Xem ngày cũ: viewDate null = đang xem hôm nay (live); khác null = đang xem ngày đó (Kanban)
     viewDate: null, showDatePick: false, oldBusy: false, oldErr: '', oldNote: '', oldCalc: null, oldAt: 0,
     newVersion: '', updateDismissed: false,
+    locked: false, lockMsg: '', remoteNotice: '', remoteNoticeId: '', noticeDismissed: false,
   };
 
   /* ------------------------------------------------------------------ *
@@ -923,8 +928,23 @@
       </span>
     </div>`;
   }
+  function noticeBannerHtml() {
+    if (!state.remoteNotice || state.noticeDismissed) return '';
+    return `<div class="tbc-noticebar">
+      <span>📢 ${esc(state.remoteNotice).replace(/\n/g, '<br>')}</span>
+      <span class="tbc-updacts"><button class="tbc-btn solid" data-a="dismissNotice">Đã đọc</button></span>
+    </div>`;
+  }
+  function lockScreenHtml() {
+    return `<div class="tbc-top">
+      <div class="tbc-off"><span class="pin">🔒</span><div><div class="nm">Trưởng Bưu Cục đang tạm khoá</div></div></div>
+      <div class="tbc-acts"><button class="tbc-btn" data-a="close">Đóng ×</button></div>
+    </div>
+    <div class="tbc-body"><div class="tbc-lockscreen"><div class="ic">🔒</div><div class="msg">${esc(state.lockMsg).replace(/\n/g, '<br>')}</div></div></div>`;
+  }
   function appHtml() {
-    return `${updateBannerHtml()}${headerHtml()}<div class="tbc-body">${bodyHtml()}</div>${WM_HTML}`;
+    if (state.locked) return `${lockScreenHtml()}${WM_HTML}`;
+    return `${updateBannerHtml()}${noticeBannerHtml()}${headerHtml()}<div class="tbc-body">${bodyHtml()}</div>${WM_HTML}`;
   }
 
   function $(s, root = document) { return root.querySelector(s); }
@@ -963,7 +983,7 @@
       return;
     }
     const a = el.dataset.a;
-    if (a === 'open') { state.open = true; render(); if (!state.office && !state.discBusy && !state.discList) initOffice(); }
+    if (a === 'open') { state.open = true; render(); if (!state.locked && !state.office && !state.discBusy && !state.discList) initOffice(); }
     else if (a === 'close') { state.open = false; render(); }
     else if (a === 'refresh') { if (state.viewDate) loadOldDay(state.viewDate); else loadData(); }
     else if (a === 'retryDisc') { state.discErr = ''; initOffice(); }
@@ -978,6 +998,7 @@
     else if (a === 'themePick') { state.theme = el.dataset.t; saveTheme(state.theme); state.showTheme = false; render(); }
     else if (a === 'doUpdate') { window.open(RAW_URL, '_blank'); }
     else if (a === 'dismissUpdate') { state.updateDismissed = true; render(); }
+    else if (a === 'dismissNotice') { state.noticeDismissed = true; saveDismissedNotice(state.remoteNoticeId); render(); }
     else if (a === 'kpiSave') {
       const m = $('#tbc-kpi-main'), tt = $('#tbc-kpi-tt');
       const km = m ? parseNum(m.value) : NaN, ktt = tt ? parseNum(tt.value) : NaN;
@@ -1058,6 +1079,12 @@
 #tbc-app .tbc-updacts .tbc-btn{background:#ffffffe6;color:#0f766e;border:none}
 #tbc-app .tbc-updacts .tbc-btn.solid{background:#fff;font-weight:800}
 #tbc-launch.tbc-hasupd{box-shadow:0 0 0 3px #14b8a6a0,0 4px 14px #0004}
+#tbc-launch.tbc-locked{background:#475569;box-shadow:0 0 0 3px #ef444480,0 4px 14px #0004}
+#tbc-app .tbc-noticebar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(90deg,#b45309,#f59e0b);color:#fff;padding:9px 16px;font-size:13px;font-weight:600;flex:0 0 auto}
+#tbc-app .tbc-noticebar .tbc-updacts .tbc-btn{background:#ffffffe6;color:#b45309;border:none;font-weight:800}
+#tbc-app .tbc-lockscreen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:30px}
+#tbc-app .tbc-lockscreen .ic{font-size:48px}
+#tbc-app .tbc-lockscreen .msg{font-size:16px;font-weight:600;color:var(--primaryTxt);max-width:520px;line-height:1.5}
 `;
 
   // Watermark không thể xóa, dạng huy hiệu (PA B đã chọn): icon + tên + email, nổi trên nền trắng mờ
@@ -1087,11 +1114,38 @@
       }
     } catch (e) { /* mạng lỗi hoặc repo chưa có file — bỏ qua, thử lại lần sau */ }
   }
+
+  /* ------------------------------------------------------------------ *
+   * Điều khiển từ xa (khoá tool / gửi thông báo) qua config.json trên GitHub.
+   * Sửa file đó trên web GitHub là áp dụng cho MỌI người, không cần đụng code:
+   *   { "locked": true/false, "lockMsg": "...", "notice": "...", "noticeId": "..." }
+   * - locked=true  → tool hiện màn khoá kèm lockMsg, không dùng được.
+   * - notice khác rỗng → hiện banner thông báo; đổi noticeId mỗi lần đổi nội dung
+   *   thông báo để nó hiện lại cho người đã bấm "Đã đọc" thông báo cũ.
+   * ------------------------------------------------------------------ */
+  function loadDismissedNotice() { try { return localStorage.getItem('tbc_notice_dismissed') || ''; } catch (e) { return ''; } }
+  function saveDismissedNotice(id) { try { localStorage.setItem('tbc_notice_dismissed', id); } catch (e) { /* bỏ qua */ } }
+  async function checkRemoteConfig() {
+    try {
+      const res = await fetch(CONFIG_URL + '?t=' + Date.now(), { cache: 'no-store' });
+      if (!res.ok) return; // chưa tạo config.json thì coi như không khoá, không có thông báo
+      const cfg = await res.json();
+      state.locked = !!cfg.locked;
+      state.lockMsg = String(cfg.lockMsg || '').trim() || 'Công cụ đang tạm khoá để bảo trì/cập nhật. Vui lòng quay lại sau.';
+      const notice = String(cfg.notice || '').trim();
+      const nid = String(cfg.noticeId || (notice ? notice.slice(0, 40) : ''));
+      state.remoteNotice = notice;
+      state.remoteNoticeId = nid;
+      state.noticeDismissed = !nid || nid === loadDismissedNotice();
+      render(); updateLaunchBtn();
+    } catch (e) { /* mạng lỗi hoặc chưa có config.json — bỏ qua, thử lại lần sau */ }
+  }
   function updateLaunchBtn() {
     const btn = $('#tbc-launch'); if (!btn) return;
     const has = !!(state.newVersion && !state.updateDismissed);
-    btn.classList.toggle('tbc-hasupd', has);
-    btn.textContent = has ? `📊 Trưởng Bưu Cục 🆕` : '📊 Trưởng Bưu Cục';
+    btn.classList.toggle('tbc-hasupd', has && !state.locked);
+    btn.classList.toggle('tbc-locked', !!state.locked);
+    btn.textContent = state.locked ? '🔒 Trưởng Bưu Cục (tạm khoá)' : (has ? '📊 Trưởng Bưu Cục 🆕' : '📊 Trưởng Bưu Cục');
   }
 
   function mount() {
@@ -1110,6 +1164,9 @@
     // Kiểm tra bản mới: ngay khi mở trang, rồi lặp lại theo chu kỳ UPDATE_CHECK_MS
     checkForUpdate();
     setInterval(checkForUpdate, UPDATE_CHECK_MS);
+    // Kiểm tra khoá/thông báo từ xa: ngay khi mở trang, rồi lặp lại theo chu kỳ CONFIG_CHECK_MS
+    checkRemoteConfig();
+    setInterval(checkRemoteConfig, CONFIG_CHECK_MS);
   }
   function safeMount() { try { mount(); } catch (e) { console.error('[Trưởng Bưu Cục] lỗi khởi động:', e); } }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', safeMount, { once: true });
