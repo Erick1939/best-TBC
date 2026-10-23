@@ -7,8 +7,8 @@
 // @run-at       document-start
 // @require      https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js
 // @grant        none
-// @updateURL    https://raw.githubusercontent.com/Erick1939/best-tbc/main/800best-truongbuucuc.user.js
-// @downloadURL  https://raw.githubusercontent.com/Erick1939/best-tbc/main/800best-truongbuucuc.user.js
+// @updateURL    https://raw.githubusercontent.com/Erick1939/best-TBC/main/800best-truongbuucuc.user.js
+// @downloadURL  https://raw.githubusercontent.com/Erick1939/best-TBC/main/800best-truongbuucuc.user.js
 // ==/UserScript==
 
 (() => {
@@ -19,7 +19,7 @@
    * @version ở đầu file mỗi lần đổi code, nếu không banner cập nhật sẽ sai.
    * ------------------------------------------------------------------ */
   const SCRIPT_VERSION = '1.8.0';
-  const RAW_URL = 'https://raw.githubusercontent.com/Erick1939/best-tbc/main/800best-truongbuucuc.user.js';
+  const RAW_URL = 'https://raw.githubusercontent.com/Erick1939/best-TBC/main/800best-truongbuucuc.user.js';
   const UPDATE_CHECK_MS = 6 * 60 * 60 * 1000; // 6 tiếng/lần, đỡ gọi GitHub liên tục
   // So 2 chuỗi "x.y.z": trả về true nếu a mới hơn b
   function verNewer(a, b) {
